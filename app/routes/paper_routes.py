@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Path
 from datetime import date
 from typing import Optional
-from app.models.paper import PaperListData
+from app.models.paper import PaperListData, PaperDetail
 from app.models.response import ApiResponse
 from app.services.arxiv_service import ArxivService
 
@@ -44,6 +44,34 @@ async def get_papers(
         return ApiResponse(
             code=500,
             message=f"获取论文失败: {str(e)}",
+            data=None
+        )
+
+
+@router.get("/{arxiv_id}", response_model=ApiResponse[PaperDetail])
+async def get_paper_detail(
+    arxiv_id: str = Path(..., description="arXiv ID，例如：2511.11570")
+):
+    """根据 arXiv ID 获取论文详情"""
+    try:
+        paper_detail = ArxivService.fetch_paper_by_id(arxiv_id)
+        
+        if paper_detail is None:
+            return ApiResponse(
+                code=404,
+                message=f"未找到 arXiv ID 为 {arxiv_id} 的论文",
+                data=None
+            )
+        
+        return ApiResponse(
+            code=200,
+            message="获取论文详情成功",
+            data=paper_detail
+        )
+    except Exception as e:
+        return ApiResponse(
+            code=500,
+            message=f"获取论文详情失败: {str(e)}",
             data=None
         )
 

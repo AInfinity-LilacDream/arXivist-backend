@@ -27,3 +27,16 @@ class PaperListData(BaseModel):
     total: int = Field(..., description="论文总数")
     date_range: str = Field(..., description="查询的日期范围")
 
+
+class AISummary(BaseModel):
+    """AI 生成的摘要模型"""
+    overview: Optional[str] = Field(None, description="论文概述")
+    background: Optional[str] = Field(None, description="研究背景")
+    methods: Optional[str] = Field(None, description="核心方法")
+    results: Optional[str] = Field(None, description="实验结果")
+
+
+class PaperDetail(Paper):
+    """论文详情模型，扩展 Paper 模型"""
+    ai_summary: Optional[AISummary] = Field(None, description="AI 生成的摘要")
+
