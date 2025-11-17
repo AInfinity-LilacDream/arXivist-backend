@@ -21,8 +21,8 @@ class Paper(BaseModel):
     entry_id: str = Field(..., description="arXiv 条目 ID")
 
 
-class PaperListResponse(BaseModel):
-    """论文列表响应模型"""
+class PaperListData(BaseModel):
+    """论文列表数据模型"""
     papers: List[Paper] = Field(..., description="论文列表")
     total: int = Field(..., description="论文总数")
     date_range: str = Field(..., description="查询的日期范围")
