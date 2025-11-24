@@ -40,6 +40,9 @@ ENV/
 # Logs
 *.log
 
+# Test files
+app/test/tokens.json
+
 # OS
 .DS_Store
 Thumbs.db
