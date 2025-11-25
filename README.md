@@ -99,12 +99,6 @@ curl "http://localhost:8000/api/papers/?category=cs.AI&max_results=20"
 python -m app.db.init_db
 ```
 
-或者：
-
-```bash
-python app/db/init_db.py
-```
-
 ## 测试
 
 项目提供了完整的API测试脚本，位于 `app/test/` 目录下。

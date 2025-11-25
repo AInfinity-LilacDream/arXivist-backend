@@ -4,6 +4,7 @@
 """
 from app.config.database import engine, Base
 from app.models.user import User, RefreshTokenBlacklist
+from app.models.collection import Collection, CollectionPaper
 
 def init_db():
     """初始化数据库表"""
@@ -12,6 +13,8 @@ def init_db():
     print("数据库表创建完成！")
     print("- users 表")
     print("- refresh_token_blacklist 表")
+    print("- collections 表")
+    print("- collection_papers 表")
 
 if __name__ == "__main__":
     init_db()

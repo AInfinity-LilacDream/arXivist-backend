@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import paper_routes, auth_routes
+from app.routes import paper_routes, auth_routes, collection_routes
 from app.config.settings import settings
 
 # 创建 FastAPI 应用实例
@@ -22,6 +22,7 @@ app.add_middleware(
 # 注册路由
 app.include_router(paper_routes.router)
 app.include_router(auth_routes.router)
+app.include_router(collection_routes.router)
 
 
 @app.get("/")
