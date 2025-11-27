@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
 
 
@@ -28,12 +28,39 @@ class PaperListData(BaseModel):
     date_range: str = Field(..., description="查询的日期范围")
 
 
+class TokenUsage(BaseModel):
+    """Token 使用情况模型"""
+    prompt_tokens: Optional[int] = Field(None, description="Prompt tokens 数量")
+    completion_tokens: Optional[int] = Field(None, description="Completion tokens 数量")
+    total_tokens: Optional[int] = Field(None, description="Total tokens 数量")
+    reasoning_length: Optional[int] = Field(None, description="推理长度")
+    content_length: Optional[int] = Field(None, description="内容长度")
+
+
+class AIScoreDetail(BaseModel):
+    """AI 评分详情模型"""
+    total_score: Optional[float] = Field(None, ge=0, le=100, description="总分（0-100分）")
+    innovation_score: Optional[float] = Field(None, ge=0, le=30, description="创新性评分（0-30分）")
+    technical_depth_score: Optional[float] = Field(None, ge=0, le=25, description="技术深度评分（0-25分）")
+    practical_value_score: Optional[float] = Field(None, ge=0, le=20, description="实用价值评分（0-20分）")
+    experiments_score: Optional[float] = Field(None, ge=0, le=15, description="实验充分性评分（0-15分）")
+    writing_score: Optional[float] = Field(None, ge=0, le=10, description="可理解性/写作质量评分（0-10分）")
+    summary: Optional[str] = Field(None, description="论文总结")
+    strengths: Optional[List[str]] = Field(default_factory=list, description="论文优点列表")
+    weaknesses: Optional[List[str]] = Field(default_factory=list, description="论文缺点列表")
+    recommendation: Optional[Literal["推荐", "强烈推荐"]] = Field(None, description="推荐建议")
+    reasoning: Optional[str] = Field(None, description="评分推理过程")
+    paper_id: Optional[str] = Field(None, description="论文ID")
+    api_model: Optional[str] = Field(None, description="API模型名称")
+    api_request_id: Optional[str] = Field(None, description="API请求ID")
+    api_created_timestamp: Optional[int] = Field(None, description="API创建时间戳")
+
+
 class AISummary(BaseModel):
     """AI 生成的摘要模型"""
-    overview: Optional[str] = Field(None, description="论文概述")
-    background: Optional[str] = Field(None, description="研究背景")
-    methods: Optional[str] = Field(None, description="核心方法")
-    results: Optional[str] = Field(None, description="实验结果")
+    score: Optional[float] = Field(None, ge=0, le=100, description="AI 综合评分（0-100分）")
+    detail: Optional[AIScoreDetail] = Field(None, description="AI 评分详情")
+    token_usage: Optional[TokenUsage] = Field(None, description="Token 使用情况")
 
 
 class PaperDetail(Paper):

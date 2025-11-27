@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 15  # access token 15分钟
     refresh_token_expire_days: int = 7  # refresh token 7天
     
+    # 智谱 AI 配置
+    zhipu_api_key: str = "98185b25e5b74cf9a55c9cb9fa844dd3.f2mVTem9uY7b34A2"  # 智谱 API Key
+    zhipu_model: str = "glm-4.6"
+    zhipu_temperature: float = 0.6
+    
     class Config:
         env_file = ".env"
         case_sensitive = False
