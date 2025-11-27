@@ -107,20 +107,19 @@ async def get_collection_detail(
         for paper_record in papers:
             try:
                 # 从 arXiv 获取论文信息
-                paper_detail = ArxivService.fetch_paper_by_id(paper_record.arxiv_id)
-                if paper_detail:
+                paper = ArxivService.fetch_paper_by_id(paper_record.arxiv_id)
+                if paper:
                     # 创建 CollectionPaperInfo（Paper + added_at）
-                    # PaperDetail 继承自 Paper，可以直接使用其字段
                     paper_info = CollectionPaperInfo(
-                        arxiv_id=paper_detail.arxiv_id,
-                        title=paper_detail.title,
-                        authors=paper_detail.authors,
-                        summary=paper_detail.summary,
-                        published=paper_detail.published,
-                        updated=paper_detail.updated,
-                        pdf_url=paper_detail.pdf_url,
-                        categories=paper_detail.categories,
-                        entry_id=paper_detail.entry_id,
+                        arxiv_id=paper.arxiv_id,
+                        title=paper.title,
+                        authors=paper.authors,
+                        summary=paper.summary,
+                        published=paper.published,
+                        updated=paper.updated,
+                        pdf_url=paper.pdf_url,
+                        categories=paper.categories,
+                        entry_id=paper.entry_id,
                         added_at=paper_record.added_at
                     )
                     papers_info.append(paper_info)
@@ -255,8 +254,8 @@ async def add_paper_to_collection(
             db, collection_id, current_user.id, arxiv_id
         )
         # 从 arXiv 获取论文详情
-        paper_detail = ArxivService.fetch_paper_by_id(arxiv_id)
-        if not paper_detail:
+        paper = ArxivService.fetch_paper_by_id(arxiv_id)
+        if not paper:
             return ApiResponse(
                 code=404,
                 message="未找到论文信息",
@@ -264,15 +263,15 @@ async def add_paper_to_collection(
             )
         # 创建 CollectionPaperInfo（Paper + added_at）
         paper_info = CollectionPaperInfo(
-            arxiv_id=paper_detail.arxiv_id,
-            title=paper_detail.title,
-            authors=paper_detail.authors,
-            summary=paper_detail.summary,
-            published=paper_detail.published,
-            updated=paper_detail.updated,
-            pdf_url=paper_detail.pdf_url,
-            categories=paper_detail.categories,
-            entry_id=paper_detail.entry_id,
+            arxiv_id=paper.arxiv_id,
+            title=paper.title,
+            authors=paper.authors,
+            summary=paper.summary,
+            published=paper.published,
+            updated=paper.updated,
+            pdf_url=paper.pdf_url,
+            categories=paper.categories,
+            entry_id=paper.entry_id,
             added_at=collection_paper.added_at
         )
         return ApiResponse(

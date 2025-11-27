@@ -1,8 +1,7 @@
 import arxiv
 from datetime import date
 from typing import List, Optional
-from app.models.paper import Paper, PaperDetail, AISummary
-from app.services.ai_service import ai_service
+from app.models.paper import Paper
 
 
 class ArxivService:
@@ -53,8 +52,8 @@ class ArxivService:
         return papers
 
     @staticmethod
-    def fetch_paper_by_id(arxiv_id: str) -> Optional[PaperDetail]:
-        """根据 arXiv ID 获取论文详情"""
+    def fetch_paper_by_id(arxiv_id: str) -> Optional[Paper]:
+        """根据 arXiv ID 获取论文详情（不包含AI评分）"""
         try:
             search = arxiv.Search(id_list=[arxiv_id])
             results = list(search.results())
@@ -76,15 +75,7 @@ class ArxivService:
                 entry_id=result.entry_id
             )
             
-            # 生成 AI 摘要和评分
-            ai_summary = ai_service.generate(paper)
-            
-            paper_detail = PaperDetail(
-                **paper.dict(),
-                ai_summary=ai_summary
-            )
-            
-            return paper_detail
+            return paper
             
         except Exception:
             return None

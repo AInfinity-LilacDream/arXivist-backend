@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import paper_routes, auth_routes, collection_routes
 from app.config.settings import settings
+from app.services.task_service import task_service
 
 # 创建 FastAPI 应用实例
 app = FastAPI(
@@ -9,6 +10,17 @@ app = FastAPI(
     version=settings.app_version,
     description="arXivist Backend - 每日 arXiv 论文检索服务"
 )
+
+# 启动任务管理器的 worker 池
+@app.on_event("startup")
+async def startup_event():
+    """应用启动时启动 worker 池"""
+    task_service.start()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """应用关闭时关闭 worker 池"""
+    await task_service.shutdown(wait=True)
 
 # 配置 CORS
 app.add_middleware(

@@ -67,3 +67,21 @@ class PaperDetail(Paper):
     """论文详情模型，扩展 Paper 模型"""
     ai_summary: Optional[AISummary] = Field(None, description="AI 生成的摘要")
 
+
+class AIScoreTaskStatus(BaseModel):
+    """AI评分任务状态响应模型"""
+    task_id: str = Field(..., description="任务ID")
+    arxiv_id: str = Field(..., description="论文arXiv ID")
+    status: str = Field(..., description="任务状态：pending、processing、completed、failed")
+    created_at: datetime = Field(..., description="任务创建时间")
+    completed_at: Optional[datetime] = Field(None, description="任务完成时间")
+    result: Optional[AISummary] = Field(None, description="评分结果")
+    error_message: Optional[str] = Field(None, description="错误信息")
+
+
+class AIScoreTaskCreate(BaseModel):
+    """创建AI评分任务响应模型"""
+    task_id: str = Field(..., description="任务ID")
+    arxiv_id: str = Field(..., description="论文arXiv ID")
+    message: str = Field(..., description="提示信息")
+
